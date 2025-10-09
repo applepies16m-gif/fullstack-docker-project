@@ -12,15 +12,14 @@
     "mern"
   ],
   "repository": {
-    "type": "git",
+    "type": "module",
     "url": "https://github.com/shamahoque/mern-social.git"
   },
   "homepage": "https://github.com/shamahoque/mern-social",
   "main": "./dist/server.generated.js",
   "scripts": {
-    "development": "nodemon",
-    "build": "webpack --config webpack.config.client.production.js && webpack --mode=production --config webpack.config.server.js",
-    "start": "NODE_ENV=production node ./dist/server.generated.js"
+    "build": "webpack --config webpack.config.server.js --mode=production && webpack --config webpack.config.client.production.js --mode=production",
+    "start": "node dist/server.bundle.js"
   },
   "engines": {
     "node": "8.11.1",
