@@ -1,0 +1,33 @@
+# ------------------------
+# Build Stage
+# ------------------------
+FROM node:18-alpine AS build
+
+WORKDIR /usr/src/app
+
+# Copy root package.json and lockfile
+COPY package*.json ./
+
+# Copy client source code
+COPY client/ ./client
+
+# Install all dependencies
+RUN npm ci
+
+# Set environment variable for React
+ENV REACT_APP_API_BASE=/api
+
+# Run build script for client from root
+RUN npm run build --prefix ./client
+
+# ------------------------
+# Final Stage (Nginx)
+# ------------------------
+FROM nginx:alpine
+
+# Copy the React build to Nginx html folder
+COPY --from=build /usr/src/app/client/build /usr/share/nginx/html
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
